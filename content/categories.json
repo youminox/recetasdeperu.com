@@ -1,0 +1,107 @@
+[
+  {
+    "slug": "top",
+    "name": "TOP",
+    "count": 441
+  },
+  {
+    "slug": "platos",
+    "name": "Platos",
+    "count": 380
+  },
+  {
+    "slug": "pan",
+    "name": "Pan",
+    "count": 237
+  },
+  {
+    "slug": "postres-sin-horno",
+    "name": "Postres Sin Horno",
+    "count": 193
+  },
+  {
+    "slug": "arroz",
+    "name": "Arroz",
+    "count": 191
+  },
+  {
+    "slug": "electrodomesticos",
+    "name": "electrodomésticos",
+    "count": 160
+  },
+  {
+    "slug": "bebidas-refrescantes-y-smoothies",
+    "name": "Bebidas refrescantes y smoothies",
+    "count": 159
+  },
+  {
+    "slug": "condimentos",
+    "name": "condimentos",
+    "count": 159
+  },
+  {
+    "slug": "desayunos-frios",
+    "name": "Desayunos fríos",
+    "count": 158
+  },
+  {
+    "slug": "snacks-crudos",
+    "name": "Snacks crudos",
+    "count": 144
+  },
+  {
+    "slug": "mejores-platos",
+    "name": "Mejores platos",
+    "count": 143
+  },
+  {
+    "slug": "bebidas",
+    "name": "Bebidas",
+    "count": 100
+  },
+  {
+    "slug": "salsas",
+    "name": "Salsas",
+    "count": 99
+  },
+  {
+    "slug": "sincalorias",
+    "name": "sincalorias",
+    "count": 76
+  },
+  {
+    "slug": "sanvalentin",
+    "name": "sanvalentin",
+    "count": 68
+  },
+  {
+    "slug": "refrigeradora",
+    "name": "Refrigeradora",
+    "count": 62
+  },
+  {
+    "slug": "restaurantes",
+    "name": "restaurantes",
+    "count": 50
+  },
+  {
+    "slug": "postres",
+    "name": "Postres",
+    "count": 40
+  },
+  {
+    "slug": "chef-reconocidos",
+    "name": "chef reconocidos",
+    "count": 30
+  },
+  {
+    "slug": "papa",
+    "name": "Papa",
+    "count": 19
+  },
+  {
+    "slug": "sarten",
+    "name": "sarten",
+    "count": 19
+  }
+]

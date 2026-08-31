@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-warm-50 text-gray-800 antialiased;
+  }
+}
+
+@layer components {
+  .recipe-content h2 {
+    @apply text-2xl font-bold text-primary-800 mt-8 mb-4 border-b border-primary-100 pb-2;
+  }
+
+  .recipe-content h3 {
+    @apply text-xl font-semibold text-primary-700 mt-6 mb-3;
+  }
+
+  .recipe-content p {
+    @apply text-gray-700 leading-relaxed mb-4;
+  }
+
+  .recipe-content ul,
+  .recipe-content ol {
+    @apply ml-6 mb-4 space-y-2;
+  }
+
+  .recipe-content ul li {
+    @apply list-disc text-gray-700;
+  }
+
+  .recipe-content ol li {
+    @apply list-decimal text-gray-700;
+  }
+
+  .recipe-content strong,
+  .recipe-content b {
+    @apply font-semibold text-gray-900;
+  }
+
+  .recipe-content a {
+    @apply text-primary-600 hover:text-primary-800 underline decoration-primary-200 hover:decoration-primary-500 transition-colors;
+  }
+
+  .recipe-content img {
+    @apply rounded-lg shadow-md my-6 mx-auto;
+  }
+
+  .recipe-content blockquote {
+    @apply border-l-4 border-accent-400 bg-accent-50 pl-4 py-2 my-4 italic;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+}
+
+/* YouTube embeds responsive */
+.recipe-content .image-video-plugin,
+.recipe-content [data-video-id] {
+  @apply relative w-full aspect-video rounded-lg overflow-hidden my-6;
+}
+
+/* AdSense container */
+.adsbygoogle {
+  display: block;
+}
