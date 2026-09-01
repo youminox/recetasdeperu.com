@@ -3,6 +3,7 @@ import path from 'path';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RecipeCard from '@/components/RecipeCard';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'content', 'index.json');
@@ -26,9 +27,32 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 
   return {
     title: `${post.title} | Recetas de Perú`,
-    description: post.excerpt,
+    description: post.excerpt?.substring(0, 155) || `Aprende a preparar ${post.title}. Receta peruana auténtica paso a paso.`,
+    alternates: {
+      canonical: `/${category}/${slug}`,
+    },
     openGraph: {
-      images: [post.featuredImage],
+      title: post.title,
+      description: post.excerpt?.substring(0, 155) || `Aprende a preparar ${post.title}.`,
+      url: `https://recetasdeperu.com/${category}/${slug}/`,
+      type: 'article',
+      publishedTime: post.date,
+      images: post.featuredImage ? [
+        {
+          url: post.featuredImage.startsWith('/') ? `https://recetasdeperu.com${post.featuredImage}` : post.featuredImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ] : [],
+      locale: 'es_PE',
+      siteName: 'Recetas de Perú',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt?.substring(0, 155),
+      images: post.featuredImage ? [post.featuredImage.startsWith('/') ? `https://recetasdeperu.com${post.featuredImage}` : post.featuredImage] : [],
     },
   };
 }
@@ -46,7 +70,7 @@ export default async function RecipePage({ params }: { params: Promise<{ categor
 
   // Read index to find related recipes
   const indexPath = path.join(process.cwd(), 'content', 'index.json');
-  let relatedPosts = [];
+  let relatedPosts: any[] = [];
   if (fs.existsSync(indexPath)) {
     const allPosts = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
     relatedPosts = allPosts
@@ -54,47 +78,64 @@ export default async function RecipePage({ params }: { params: Promise<{ categor
       .slice(0, 4);
   }
 
-  const jsonLd = {
+  // Recipe Schema (critical for Google Rich Results)
+  const recipeJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    image: post.featuredImage,
+    '@type': 'Recipe',
+    name: post.title,
+    description: post.excerpt || `Receta peruana auténtica de ${post.title}`,
+    image: post.featuredImage ? [
+      post.featuredImage.startsWith('/') ? `https://recetasdeperu.com${post.featuredImage}` : post.featuredImage,
+    ] : [],
     datePublished: post.date,
     author: {
-      '@type': 'Person',
+      '@type': 'Organization',
       name: 'Recetas de Perú',
+      url: 'https://recetasdeperu.com',
     },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Recetas de Perú',
+      url: 'https://recetasdeperu.com',
+    },
+    recipeCuisine: 'Peruana',
+    recipeCategory: post.categoryName,
+    url: `https://recetasdeperu.com/${category}/${slug}/`,
   };
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeJsonLd) }}
       />
 
-      {/* Breadcrumbs */}
-      <div className="text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:text-primary">Home</Link> &gt;{' '}
-        <Link href={`/${category}`} className="hover:text-primary">{post.categoryName}</Link> &gt;{' '}
-        <span className="text-gray-800">{post.title}</span>
-      </div>
+      {/* Breadcrumbs with Schema.org BreadcrumbList */}
+      <Breadcrumbs items={[
+        { label: 'Inicio', href: '/' },
+        { label: post.categoryName, href: `/${category}/` },
+        { label: post.title },
+      ]} />
 
-      <div className="mb-8">
-        <span className="inline-block bg-accent/20 text-accent-dark px-3 py-1 rounded-full text-sm font-semibold mb-4">
+      <div className="mb-8 mt-6">
+        <Link href={`/${category}/`} className="inline-block bg-primary-50 text-primary-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 hover:bg-primary-100 transition-colors">
           {post.categoryName}
-        </span>
-        <h1 className="font-playfair text-4xl md:text-5xl font-bold text-gray-900 mb-4">{post.title}</h1>
-        <p className="text-gray-500">{new Date(post.date).toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        </Link>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">{post.title}</h1>
+        <time className="text-gray-500" dateTime={post.date}>
+          {new Date(post.date).toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
       </div>
 
       {post.featuredImage && (
-        <div className="mb-10 rounded-xl overflow-hidden shadow-lg">
+        <div className="mb-10 rounded-2xl overflow-hidden shadow-lg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src={post.featuredImage} 
             alt={post.title} 
-            className="w-full h-auto object-cover max-h-[500px]" 
+            className="w-full h-auto object-cover max-h-[500px]"
+            fetchPriority="high"
+            decoding="async"
           />
         </div>
       )}
@@ -104,28 +145,27 @@ export default async function RecipePage({ params }: { params: Promise<{ categor
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
-      {/* AdSense Placement */}
-      <div className="my-8 flex justify-center bg-gray-50 py-4 border border-gray-100 rounded">
-        <p className="text-xs text-gray-400 mb-2 text-center w-full block">Advertisement</p>
+      {/* AdSense Placement with reserved height to prevent CLS */}
+      <div className="my-8 flex flex-col items-center bg-gray-50 py-4 border border-gray-100 rounded-xl min-h-[280px]">
+        <p className="text-xs text-gray-400 mb-2 text-center w-full block">Publicidad</p>
         <ins className="adsbygoogle"
-             style={{ display: 'block', textAlign: 'center' }}
+             style={{ display: 'block', textAlign: 'center' } as React.CSSProperties}
              data-ad-layout="in-article"
              data-ad-format="fluid"
              data-ad-client="ca-pub-1070738569472471"
              data-ad-slot="1234567890"></ins>
-        <script dangerouslySetInnerHTML={{ __html: '(adsbygoogle = window.adsbygoogle || []).push({});' }} />
       </div>
 
       {/* Related Recipes */}
       {relatedPosts.length > 0 && (
-        <div className="mt-16 pt-8 border-t border-gray-200">
-          <h3 className="font-playfair text-2xl font-bold mb-6">Recetas Relacionadas</h3>
+        <section className="mt-16 pt-8 border-t border-gray-200">
+          <h2 className="text-2xl font-bold mb-6">Recetas Relacionadas</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedPosts.map((rp: any) => (
               <RecipeCard key={rp.slug} post={rp} />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </article>
   );

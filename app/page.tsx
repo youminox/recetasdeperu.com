@@ -25,8 +25,26 @@ export default function Home() {
     return emojis[slug] || '🍽️';
   };
 
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Recetas de Perú',
+    url: 'https://recetasdeperu.com/',
+    description: 'Descubre las auténticas recetas de comida del Perú. Recetas tradicionales paso a paso.',
+    inLanguage: 'es',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Recetas de Perú',
+      url: 'https://recetasdeperu.com',
+    },
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       {/* Hero Section */}
       <section 
         className="relative py-20 md:py-24"
