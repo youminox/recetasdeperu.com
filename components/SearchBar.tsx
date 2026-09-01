@@ -55,7 +55,7 @@ export default function SearchBar({ posts }: SearchBarProps) {
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto z-40" ref={searchRef}>
+    <div className="relative w-full max-w-2xl mx-auto z-50" ref={searchRef}>
       <form onSubmit={handleSubmit} className="relative bg-white rounded-2xl shadow-2xl p-2 md:p-3 flex flex-col sm:flex-row gap-3 border border-gray-100">
         <div className="flex-grow flex items-center bg-gray-50 rounded-xl px-4 py-3 sm:py-0 border border-gray-100 focus-within:border-primary-300 focus-within:ring-2 focus-within:ring-primary-100 transition-all">
           <svg className="w-6 h-6 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

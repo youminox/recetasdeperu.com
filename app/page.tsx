@@ -29,11 +29,11 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
       <section 
-        className="relative overflow-hidden py-20 md:py-24"
+        className="relative py-20 md:py-24"
         style={{ background: 'linear-gradient(135deg, #7f1d1d 0%, #dc2626 40%, #ef4444 100%)' }}
       >
-        <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 60%)' }}></div>
-        <div className="hero-bubbles">
+        <div className="absolute inset-0 z-0 overflow-hidden" style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 60%)' }}></div>
+        <div className="hero-bubbles overflow-hidden">
           {[...Array(12)].map((_, i) => (
             <span key={i} className="hero-bubble"></span>
           ))}
