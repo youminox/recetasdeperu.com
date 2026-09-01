@@ -1,52 +1,64 @@
 import Link from 'next/link';
 
-interface PostPreview {
-  slug: string;
-  title: string;
-  category: string;
-  categoryName: string;
-  date: string;
-  excerpt: string;
-  featuredImage?: string;
+interface RecipeCardProps {
+  post: {
+    slug: string;
+    title: string;
+    category: string;
+    categoryName: string;
+    date: string;
+    excerpt: string;
+    featuredImage: string;
+  };
 }
 
-export default function RecipeCard({ post }: { post: PostPreview }) {
-  const dateFormatted = new Date(post.date).toLocaleDateString('es-PE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const imageUrl = post.featuredImage || '/images/placeholder.jpg';
-
+export default function RecipeCard({ post }: RecipeCardProps) {
   return (
-    <Link href={`/${post.category}/${post.slug}/`} className="group block h-full">
-      <article className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden h-full flex flex-col card-hover border border-warm-100">
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-warm-100">
-          <img
-            src={imageUrl}
-            alt={post.title}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <div className="absolute top-4 left-4">
-            <span className="bg-accent-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-              {post.categoryName}
-            </span>
-          </div>
+    <Link 
+      href={`/${post.category}/${post.slug}/`}
+      className="group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-primary-600/20 hover:shadow-xl hover:-translate-y-1 h-full"
+    >
+      <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary-600 to-primary-400 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+      
+      <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
+        <img
+          src={post.featuredImage}
+          alt={post.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60"></div>
+        <div className="absolute bottom-3 left-3">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white text-primary-700 shadow-sm">
+            {post.categoryName}
+          </span>
         </div>
-        <div className="p-5 flex flex-col flex-grow">
-          <h3 className="text-xl font-display font-bold text-warm-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
-            {post.title}
-          </h3>
-          <p className="text-warm-600 text-sm mb-4 line-clamp-2 flex-grow">
-            {post.excerpt}
-          </p>
-          <time className="text-xs text-warm-500 font-medium mt-auto" dateTime={post.date}>
-            {dateFormatted}
-          </time>
+      </div>
+      
+      <div className="p-5 flex flex-col flex-grow">
+        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+          {post.title}
+        </h3>
+        
+        <p className="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">
+          {post.excerpt}
+        </p>
+        
+        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-sm">
+          <span className="text-gray-400">
+            {new Date(post.date).toLocaleDateString('es-PE', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </span>
+          <span className="font-medium text-primary-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+            Ver receta 
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </span>
         </div>
-      </article>
+      </div>
     </Link>
   );
 }
