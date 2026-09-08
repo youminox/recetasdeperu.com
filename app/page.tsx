@@ -65,12 +65,7 @@ export default function Home() {
             Descubre la magia de la gastronomía peruana. Recetas tradicionales paso a paso para disfrutar en casa.
           </p>
           <div className="max-w-xl mx-auto">
-            <SearchBar posts={posts.map(p => ({
-              slug: p.slug, 
-              title: p.title, 
-              category: p.category, 
-              categoryName: p.categoryName
-            }))} />
+            <SearchBar />
           </div>
         </div>
       </section>
@@ -101,8 +96,8 @@ export default function Home() {
             <p className="text-gray-600">Las más recientes incorporaciones a nuestra colección</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredPosts.map(post => (
-              <RecipeCard key={post.slug} post={post} />
+            {featuredPosts.map((post, index) => (
+              <RecipeCard key={post.slug} post={post} priority={index < 3} />
             ))}
           </div>
           <div className="text-center mt-12">

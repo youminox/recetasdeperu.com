@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
-import Script from 'next/script';
+import { useEffect, useRef } from 'react';
 
 interface AdSenseProps {
   slot?: string;
@@ -10,15 +9,37 @@ interface AdSenseProps {
 }
 
 export default function AdSense({ slot, format = 'auto', className = '' }: AdSenseProps) {
+  const adRef = useRef<HTMLDivElement>(null);
+  const pushedRef = useRef(false);
+
   useEffect(() => {
-    try {
-      if (process.env.NODE_ENV === 'production') {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    } catch (err) {
-      console.error('AdSense error:', err);
+    if (process.env.NODE_ENV !== 'production') return;
+    if (pushedRef.current) return;
+
+    // Only push ad when element is visible in viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !pushedRef.current) {
+            pushedRef.current = true;
+            try {
+              // @ts-ignore
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (err) {
+              console.error('AdSense error:', err);
+            }
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '200px' }
+    );
+
+    if (adRef.current) {
+      observer.observe(adRef.current);
     }
+
+    return () => observer.disconnect();
   }, []);
 
   if (process.env.NODE_ENV !== 'production') {
@@ -30,23 +51,16 @@ export default function AdSense({ slot, format = 'auto', className = '' }: AdSen
   }
 
   return (
-    <>
-      <Script
-        id="adsbygoogle-script"
-        strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1070738569472471"
-        crossOrigin="anonymous"
+    <div className={className} ref={adRef}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-1070738569472471"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
       />
-      <div className={className}>
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block' }}
-          data-ad-client="ca-pub-1070738569472471"
-          data-ad-slot={slot}
-          data-ad-format={format}
-          data-full-width-responsive="true"
-        />
-      </div>
-    </>
+    </div>
   );
 }
+

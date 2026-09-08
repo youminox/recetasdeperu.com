@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 
 interface Post {
@@ -10,15 +10,31 @@ interface Post {
   categoryName: string;
 }
 
-interface SearchBarProps {
-  posts: Post[];
-}
-
-export default function SearchBar({ posts }: SearchBarProps) {
+export default function SearchBar() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Post[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const indexLoadedRef = useRef(false);
+
+  // Load search index on first focus
+  const loadSearchIndex = useCallback(async () => {
+    if (indexLoadedRef.current) return;
+    indexLoadedRef.current = true;
+    setIsLoading(true);
+    try {
+      const res = await fetch('/search-index.json');
+      const data = await res.json();
+      setPosts(data);
+    } catch (err) {
+      console.error('Failed to load search index:', err);
+      indexLoadedRef.current = false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -71,6 +87,7 @@ export default function SearchBar({ posts }: SearchBarProps) {
               if (e.target.value.length >= 2) setIsOpen(true);
             }}
             onFocus={() => {
+              loadSearchIndex();
               if (query.length >= 2) setIsOpen(true);
             }}
           />
@@ -87,9 +104,11 @@ export default function SearchBar({ posts }: SearchBarProps) {
         <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-[60vh] overflow-y-auto">
           <div className="p-4 border-b border-gray-50 bg-gray-50/50">
             <p className="text-sm font-medium text-gray-500">
-              {results.length > 0 
-                ? `Se encontraron ${results.length} recetas` 
-                : "No se encontraron recetas con esos términos"}
+              {isLoading 
+                ? "Cargando recetas..."
+                : results.length > 0 
+                  ? `Se encontraron ${results.length} recetas` 
+                  : "No se encontraron recetas con esos términos"}
             </p>
           </div>
           

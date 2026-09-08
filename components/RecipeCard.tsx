@@ -10,9 +10,11 @@ interface RecipeCardProps {
     excerpt: string;
     featuredImage: string;
   };
+  /** Set to true for above-the-fold cards (first 2-3 visible cards) */
+  priority?: boolean;
 }
 
-export default function RecipeCard({ post }: RecipeCardProps) {
+export default function RecipeCard({ post, priority = false }: RecipeCardProps) {
   return (
     <Link 
       href={`/${post.category}/${post.slug}/`}
@@ -24,6 +26,12 @@ export default function RecipeCard({ post }: RecipeCardProps) {
         <img
           src={post.featuredImage}
           alt={post.title}
+          width={1152}
+          height={720}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          fetchPriority={priority ? "high" : undefined}
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60"></div>
