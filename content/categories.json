@@ -103,5 +103,65 @@
     "slug": "sarten",
     "name": "sarten",
     "count": 19
+  },
+  {
+    "slug": "rutas-lima-y-callao",
+    "name": "Rutas de Lima y Callao",
+    "count": 80
+  },
+  {
+    "slug": "cocina-regional-ciudades",
+    "name": "Cocina Regional y Picanterías",
+    "count": 80
+  },
+  {
+    "slug": "peruanos-en-el-mundo",
+    "name": "Peruanos en el Mundo",
+    "count": 90
+  },
+  {
+    "slug": "menus-y-presupuesto",
+    "name": "Menús Semanales y Loncheras",
+    "count": 100
+  },
+  {
+    "slug": "chifa-y-nikkei-casero",
+    "name": "Chifa y Cocina Nikkei",
+    "count": 90
+  },
+  {
+    "slug": "fuego-brasa-y-ollas",
+    "name": "Caja China, Cilindro y Ollas",
+    "count": 90
+  },
+  {
+    "slug": "nutricion-y-dietas-peruanas",
+    "name": "Nutrición, Antianemia y Dietas",
+    "count": 90
+  },
+  {
+    "slug": "cortes-pescados-e-insumos",
+    "name": "Cortes, Pescados e Insumos",
+    "count": 90
+  },
+  {
+    "slug": "pisco-cocteleria-y-bebidas-calientes",
+    "name": "Pisco, Coctelería y Emolientes",
+    "count": 80
+  },
+  {
+    "slug": "panaderia-regional-y-dulces-de-convento",
+    "name": "Panes Regionales y Dulces de Antaño",
+    "count": 70
+  },
+  {
+    "slug": "rescate-culinario-y-tecnicas",
+    "name": "Rescate Culinario y Técnicas",
+    "count": 70
+  },
+  {
+    "slug": "calendario-festivo-y-banquetes",
+    "name": "Navidad, Fiestas Patrias y Banquetes",
+    "count": 70
   }
 ]

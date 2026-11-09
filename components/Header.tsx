@@ -19,10 +19,12 @@ export default function Header() {
 
   const navLinks = [
     { name: 'Platos', href: '/platos/' },
-    { name: 'Bebidas', href: '/bebidas/' },
+    { name: 'Rutas Lima', href: '/rutas-lima-y-callao/' },
+    { name: 'Menús S/', href: '/menus-y-presupuesto/' },
+    { name: 'Chifa & Nikkei', href: '/chifa-y-nikkei-casero/' },
+    { name: 'Caja China & Ollas', href: '/fuego-brasa-y-ollas/' },
     { name: 'Postres', href: '/postres/' },
-    { name: 'Salsas', href: '/salsas/' },
-    { name: 'Arroz', href: '/arroz/' },
+    { name: 'Bebidas', href: '/bebidas/' },
   ];
 
   return (

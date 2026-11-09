@@ -20,7 +20,19 @@ export default function Home() {
       'mejores-platos': '🏆', 'sincalorias': '🥗',
       'sanvalentin': '❤️', 'refrigeradora': '🧊',
       'restaurantes': '🍽️', 'chef-reconocidos': '👨‍🍳',
-      'papa': '🥔', 'sarten': '🍳', 'bebidas-refrescantes-y-smoothies': '🥤'
+      'papa': '🥔', 'sarten': '🍳', 'bebidas-refrescantes-y-smoothies': '🥤',
+      'rutas-lima-y-callao': '📍',
+      'cocina-regional-ciudades': '🇵🇪',
+      'peruanos-en-el-mundo': '🌎',
+      'menus-y-presupuesto': '💰',
+      'chifa-y-nikkei-casero': '🥢',
+      'fuego-brasa-y-ollas': '🔥',
+      'nutricion-y-dietas-peruanas': '🩺',
+      'cortes-pescados-e-insumos': '🐟',
+      'pisco-cocteleria-y-bebidas-calientes': '🍸',
+      'panaderia-regional-y-dulces-de-convento': '🥐',
+      'rescate-culinario-y-tecnicas': '🧪',
+      'calendario-festivo-y-banquetes': '🎉'
     };
     return emojis[slug] || '🍽️';
   };
@@ -74,11 +86,11 @@ export default function Home() {
       <section className="border-y border-gray-100 bg-white py-12 px-4">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div>
-            <div className="text-4xl font-bold text-primary-600 mb-2">2,928+</div>
-            <div className="text-gray-500 uppercase tracking-wide text-sm font-semibold">Recetas</div>
+            <div className="text-4xl font-bold text-primary-600 mb-2">{posts.length.toLocaleString('es-PE')}+</div>
+            <div className="text-gray-500 uppercase tracking-wide text-sm font-semibold">Recetas y Guías</div>
           </div>
           <div>
-            <div className="text-4xl font-bold text-primary-600 mb-2">21</div>
+            <div className="text-4xl font-bold text-primary-600 mb-2">{categories.length}</div>
             <div className="text-gray-500 uppercase tracking-wide text-sm font-semibold">Categorías</div>
           </div>
           <div>
