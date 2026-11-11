@@ -115,11 +115,12 @@ function buildIngredientsAndSteps(seed) {
       recipeYield: "4 vasos o copas",
       calories: "165 kcal por porción",
       ingredients: [
-        `Insumo base seleccionado para ${seed.title.split(":")[0]}`,
-        "Limón sutil de Chulucanas/Olmos recién exprimido o especias enteras (canela, clavo de olor y anís)",
-        "Endulzante equilibrado: jarabe de goma casero 2:1, chancaca clara o miel de estación",
-        "Hielo macizo cristalino o agua filtrada según la temperatura de servicio",
-        "Guarnición aromática: amargo de angostura, hoja de hierbabuena, cáscara de cítrico o fruta picada",
+        "4 oz de pisco peruano quebranta o base frutal",
+        "2 oz de jugo de limón sutil recién exprimido",
+        "2 oz de jarabe de goma o miel de chancaca",
+        "1 clara de huevo fresco o agua de hierbas",
+        "6 cubos de hielo macizo cristalino",
+        "Canela entera, clavo de olor y angostura",
       ],
       instructions: [
         { name: "Selección y acondicionamiento de insumos", text: `Verifica la frescura de los ingredientes principales para ${kw}. Si trabajas con cítricos peruanos, exprímelos solo hasta el 60% para evitar el amargor de la cáscara blanca.` },
@@ -137,13 +138,14 @@ function buildIngredientsAndSteps(seed) {
     recipeYield: "4 porciones abundantes",
     calories: "380 kcal por porción",
     ingredients: [
-      `800 g de proteína o insumo principal fresco para ${seed.title.split(":")[0]}`,
-      "2 cebollas rojas de Arequipa picadas en brunoise fina para el aderezo base",
-      "3 dientes de ajo criollo chancados en batán o mortero",
-      "3 cucharadas de pasta de ají peruano (amarillo, panca o mirasol blanqueado 3 veces)",
-      "1 taza de fondo concentrado casero (ave, res, pescado o verduras) y toque de chicha de jora",
-      "Hierbas aromáticas frescas (culantro, hierbabuena, huacatay, orégano de Tacna o cebolla china)",
-      "Sal de Maras o marina, pimienta negra recién molida y comino al gusto",
+      "800 g de proteína o insumo principal fresco",
+      "2 cebollas rojas picadas en brunoise fina",
+      "3 dientes de ajo criollo chancados en batán",
+      "3 cdas de pasta de ají amarillo o ají panca",
+      "1 taza de caldo concentrado casero",
+      "1/2 taza de chicha de jora o vino tinto",
+      "1 atado de culantro, huacatay o hierbabuena",
+      "Sal de Maras, pimienta negra y comino",
     ],
     instructions: [
       { name: "Mise en place y acondicionamiento", text: `Limpia, seca y porciona los ingredientes principales de ${kw}. Tener todos los cortes listos antes de encender la hornilla evita sobrecocciones.` },
@@ -245,7 +247,7 @@ function buildHtmlBySkeleton(skeleton, seed, img2, recipeData, crossLinks) {
     .join("\n  ");
 
   const stepsOlHtml = recipeData.instructions
-    .map((st) => `<li><strong>${st.name}:</strong> ${st.text}</li>`)
+    .map((st, idx) => `<li id="paso-${idx + 1}"><strong>${st.name}:</strong> ${st.text}</li>`)
     .join("\n  ");
 
   switch (skeleton) {
@@ -555,7 +557,7 @@ async function main() {
       category: seed.category,
       categoryName: seed.categoryName,
       date: dateISO,
-      updatedAt: "2026-11-09",
+      updatedAt: "2026-11-11T08:00:00-05:00",
       readTime: `${6 + (idx % 5)} min`,
       excerpt: seed.summary,
       featuredImage: img1,
