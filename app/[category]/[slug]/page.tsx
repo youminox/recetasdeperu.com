@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RecipeCard from '@/components/RecipeCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import FuxionProductCard from '@/components/FuxionProductCard';
 import {
   getPostBySlug,
   getRelatedPosts,
+  getFuxionProduct,
   type Post,
 } from '@/lib/posts';
 
@@ -849,8 +851,8 @@ function buildDynamicJsonLd(post: Post, category: string, slug: string) {
         '@type': 'NutritionInformation',
         calories: r.calories,
       },
-      aggregateRating,
-      video: videoObject,
+      aggregateRating: post.fuxion ? undefined : aggregateRating,
+      video: post.fuxion ? undefined : videoObject,
       recipeIngredient: sanitizeRecipeIngredients(r.ingredients, post),
       recipeInstructions: r.instructions.map((step, i) => ({
         '@type': 'HowToStep',
@@ -955,6 +957,8 @@ export default async function RecipePage({
   const relatedPosts = getRelatedPosts(category, slug, 4);
   const jsonLd = buildDynamicJsonLd(post, category, slug);
   const skeleton = post.domSkeleton || 'story-and-masterclass';
+  const fuxionPrimary = getFuxionProduct(post.fuxion?.primaryProduct);
+  const fuxionSecondary = getFuxionProduct(post.fuxion?.secondaryProduct);
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
@@ -1058,10 +1062,45 @@ export default async function RecipePage({
         <TableOfContentsBlock toc={post.toc} compact={true} />
       )}
 
-      <div
-        className="recipe-content prose prose-lg max-w-none mb-12"
-        dangerouslySetInnerHTML={{ __html: post.content || '' }}
-      />
+      {fuxionPrimary && (post.content || '').includes('<!--FUXION_CARD-->') ? (
+        (post.content || '').split('<!--FUXION_CARD-->').map((chunk, i) => (
+          <div key={i}>
+            {i > 0 && (
+              <FuxionProductCard
+                product={fuxionPrimary}
+                note={post.fuxion?.cardNotePrimary}
+                variant="primary"
+              />
+            )}
+            <div
+              className="recipe-content prose prose-lg max-w-none mb-6"
+              dangerouslySetInnerHTML={{ __html: chunk }}
+            />
+          </div>
+        ))
+      ) : (
+        <>
+          <div
+            className="recipe-content prose prose-lg max-w-none mb-12"
+            dangerouslySetInnerHTML={{ __html: post.content || '' }}
+          />
+          {fuxionPrimary && (
+            <FuxionProductCard
+              product={fuxionPrimary}
+              note={post.fuxion?.cardNotePrimary}
+              variant="primary"
+            />
+          )}
+        </>
+      )}
+
+      {fuxionSecondary && (
+        <FuxionProductCard
+          product={fuxionSecondary}
+          note={post.fuxion?.cardNoteSecondary}
+          variant="secondary"
+        />
+      )}
 
       {(skeleton === 'local-directory-guide' ||
         skeleton === 'encyclopedic-glossary') && (

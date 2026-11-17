@@ -64,6 +64,11 @@ export default function Footer() {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
+              <Link href="/fuxion/" className="text-gray-400 hover:text-white transition-colors">
+                🍵 Recetas con FuXion
+              </Link>
+            </li>
+            <li>
               <Link href="/rutas-lima-y-callao/" className="text-gray-400 hover:text-white transition-colors">
                 📍 Huariques y Mercados en Lima
               </Link>

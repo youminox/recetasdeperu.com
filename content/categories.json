@@ -163,5 +163,10 @@
     "slug": "calendario-festivo-y-banquetes",
     "name": "Navidad, Fiestas Patrias y Banquetes",
     "count": 70
+  },
+  {
+    "slug": "fuxion",
+    "name": "Recetas con FuXion",
+    "count": 50
   }
 ]

@@ -25,6 +25,7 @@ export default function Header() {
     { name: 'Caja China & Ollas', href: '/fuego-brasa-y-ollas/' },
     { name: 'Postres', href: '/postres/' },
     { name: 'Bebidas', href: '/bebidas/' },
+    { name: 'Recetas FuXion', href: '/fuxion/' },
   ];
 
   return (

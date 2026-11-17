@@ -32,7 +32,8 @@ export default function Home() {
       'pisco-cocteleria-y-bebidas-calientes': '🍸',
       'panaderia-regional-y-dulces-de-convento': '🥐',
       'rescate-culinario-y-tecnicas': '🧪',
-      'calendario-festivo-y-banquetes': '🎉'
+      'calendario-festivo-y-banquetes': '🎉',
+      'fuxion': '🍵'
     };
     return emojis[slug] || '🍽️';
   };

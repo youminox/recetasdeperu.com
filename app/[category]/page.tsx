@@ -3,6 +3,7 @@ import path from 'path';
 import { notFound } from 'next/navigation';
 import RecipeCard from '@/components/RecipeCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import FuxionHub from '@/components/FuxionHub';
 
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'content', 'categories.json');
@@ -24,6 +25,24 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const catData = categories.find((c: any) => c.slug === category);
   
   if (!catData) return {};
+
+  if (category === 'fuxion') {
+    return {
+      title: 'Recetas con FuXion: cocina peruana con productos funcionales | Recetas de Perú',
+      description:
+        'Recetario peruano con productos FuXion: postres de matcha, refrescos, desayunos, loncheras y platos criollos paso a paso, con costos en soles.',
+      alternates: { canonical: '/fuxion/' },
+      openGraph: {
+        title: 'Recetas con FuXion: cocina peruana con productos funcionales',
+        description:
+          'Postres, refrescos, desayunos y platos criollos paso a paso con productos FuXion.',
+        url: 'https://recetasdeperu.com/fuxion/',
+        type: 'website',
+        locale: 'es_PE',
+        siteName: 'Recetas de Perú',
+      },
+    };
+  }
   
   return {
     title: `${catData.name} - Recetas Peruanas | Recetas de Perú`,
@@ -60,6 +79,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     const allPosts = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
     categoryPosts = allPosts.filter((p: any) => p.category === category)
       .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
+
+  if (category === 'fuxion') {
+    return <FuxionHub posts={categoryPosts} />;
   }
 
   return (

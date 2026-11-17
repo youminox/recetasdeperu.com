@@ -496,7 +496,9 @@ async function main() {
 
   // Filtrar artículos originales (heredados de WordPress) para que el script sea 100% idempotente
   const newCategorySlugs = new Set(NEW_CATEGORIES_META.map((c) => c.slug));
-  const legacyPosts = rawIndex.filter((p) => !p.isGenerated2026 && !newCategorySlugs.has(p.category));
+  const legacyPosts = rawIndex.filter(
+    (p) => (!p.isGenerated2026 || p.category === "fuxion") && !newCategorySlugs.has(p.category)
+  );
   const legacyCategories = rawCategories.filter((c) => !newCategorySlugs.has(c.slug));
 
   console.log(`📚 Artículos base heredados preservados: ${legacyPosts.length}`);

@@ -134,6 +134,51 @@ export interface Post {
   nutritionInfo?: NutritionLabInfo;
   comparisonInfo?: CulinaryComparisonInfo;
   recipeSchemaData?: RecipeSchemaPayload;
+  fuxion?: FuxionArticleMeta;
+}
+
+export interface FuxionProduct {
+  slug: string;
+  sku: string;
+  cleanName: string;
+  categoryName: string;
+  badge: string;
+  price: number;
+  formattedPrice: string;
+  pack: string;
+  points: number;
+  perStickFormatted: string;
+  inStock: boolean;
+  shopUrl: string;
+  image: string;
+  description: string;
+  benefits: string[];
+  preparation: string;
+}
+
+export interface FuxionArticleMeta {
+  format: 'receta' | 'plato' | 'menu' | 'duelo' | 'temporada' | 'pilar';
+  primaryProduct: string;
+  secondaryProduct?: string;
+  cardNotePrimary?: string;
+  cardNoteSecondary?: string;
+  costSoles?: string;
+}
+
+let fuxionProductsCache: FuxionProduct[] | null = null;
+
+export function getFuxionProducts(): FuxionProduct[] {
+  if (fuxionProductsCache) return fuxionProductsCache;
+  const filePath = path.join(process.cwd(), 'content', 'fuxion-products.json');
+  fuxionProductsCache = fs.existsSync(filePath)
+    ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    : [];
+  return fuxionProductsCache as FuxionProduct[];
+}
+
+export function getFuxionProduct(slug?: string): FuxionProduct | null {
+  if (!slug) return null;
+  return getFuxionProducts().find((p) => p.slug === slug) || null;
 }
 
 export interface Category {
