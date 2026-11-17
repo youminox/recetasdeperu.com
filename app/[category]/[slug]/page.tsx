@@ -584,32 +584,6 @@ function TableOfContentsBlock({
   );
 }
 
-const FALLBACK_YOUTUBE_IDS = [
-  'eM5S9snAhu0',
-  'F2RQam2cC8Y',
-  'SOjJozZuix8',
-  'jrtUnGrlNeI',
-  'kCsC68byCR8',
-  'JgweEtQN6lM',
-  'rgXc3RIxGf0',
-  'cLXjhbbiWL8',
-  'QHDQ-oB7RZs',
-  'ylkW9Gw4iOQ',
-  'NtgRzjY93oQ',
-  'exCFj-8KSKo',
-  'mtnaL6rHnYg',
-  '8L_IVF5nIw0',
-  'hMY_bn6jTS8',
-];
-
-function hashSlug(slug: string): number {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) {
-    h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  }
-  return h;
-}
-
 function normalizeIsoDate(rawDate?: string): string {
   if (!rawDate) return '2026-09-01T12:00:00-05:00';
   const trimmed = rawDate.trim();
@@ -619,39 +593,25 @@ function normalizeIsoDate(rawDate?: string): string {
   return trimmed;
 }
 
-function buildAggregateRating(slug: string) {
-  const h = hashSlug(slug);
-  const ratings = ['4.8', '4.9', '4.7'];
-  return {
-    '@type': 'AggregateRating',
-    ratingValue: ratings[h % ratings.length],
-    ratingCount: String(24 + (h % 115)),
-    bestRating: '5',
-    worstRating: '1',
-  };
-}
-
-function buildVideoObject(post: Post, imageUrl: string, publishIso: string) {
+/**
+ * Solo declara VideoObject cuando la página realmente incrusta un video de YouTube
+ * (data-video-id en el HTML). Nunca se inventan videos ni valoraciones (aggregateRating):
+ * hacerlo infringe las políticas de datos estructurados de Google.
+ */
+function buildVideoObject(post: Post, publishIso: string) {
   const match = (post.content || '').match(/data-video-id=['"]([^'"]+)['"]/i);
-  const h = hashSlug(post.slug);
-  const videoId =
-    match && match[1]
-      ? match[1]
-      : FALLBACK_YOUTUBE_IDS[h % FALLBACK_YOUTUBE_IDS.length];
+  if (!match || !match[1]) return undefined;
+  const videoId = match[1];
 
   return {
     '@type': 'VideoObject',
     name: post.title,
     description:
       post.excerpt || `Receta peruana auténtica paso a paso: ${post.title}`,
-    thumbnailUrl: [
-      imageUrl,
-      `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-    ],
+    thumbnailUrl: [`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`],
     uploadDate: publishIso,
     contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
     embedUrl: `https://www.youtube.com/embed/${videoId}`,
-    duration: 'PT6M30S',
   };
 }
 
@@ -791,8 +751,7 @@ function buildDynamicJsonLd(post: Post, category: string, slug: string) {
 
   const datePublishedIso = normalizeIsoDate(post.date);
   const dateModifiedIso = normalizeIsoDate(post.updatedAt || post.date);
-  const aggregateRating = buildAggregateRating(slug);
-  const videoObject = buildVideoObject(post, imageUrl, datePublishedIso);
+  const videoObject = buildVideoObject(post, datePublishedIso);
 
   // Legacy posts: complete 100% Google Rich Results Recipe schema
   if (!post.isGenerated2026) {
@@ -817,8 +776,7 @@ function buildDynamicJsonLd(post: Post, category: string, slug: string) {
         '@type': 'NutritionInformation',
         calories: '360 kcal por porción',
       },
-      aggregateRating,
-      video: videoObject,
+      ...(videoObject ? { video: videoObject } : {}),
       recipeIngredient: sanitizeRecipeIngredients(undefined, post),
       recipeInstructions: buildLegacyInstructions(post, canonicalUrl, imageUrl),
       url: canonicalUrl,
@@ -851,8 +809,7 @@ function buildDynamicJsonLd(post: Post, category: string, slug: string) {
         '@type': 'NutritionInformation',
         calories: r.calories,
       },
-      aggregateRating: post.fuxion ? undefined : aggregateRating,
-      video: post.fuxion ? undefined : videoObject,
+      ...(videoObject ? { video: videoObject } : {}),
       recipeIngredient: sanitizeRecipeIngredients(r.ingredients, post),
       recipeInstructions: r.instructions.map((step, i) => ({
         '@type': 'HowToStep',
