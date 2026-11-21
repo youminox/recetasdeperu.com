@@ -3,16 +3,19 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { openChat } from '@/lib/chat-constants';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const isHomeTop = pathname === '/' && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 18);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -31,8 +34,10 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${
-        isScrolled
-          ? 'bg-white/80 backdrop-blur-md border-gray-200 shadow-sm'
+        isHomeTop
+          ? 'bg-[#140a08]/45 backdrop-blur-md border-white/10'
+          : isScrolled
+          ? 'bg-white/90 backdrop-blur-md border-gray-200 shadow-sm'
           : 'bg-white border-gray-100'
       }`}
     >
@@ -40,41 +45,100 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-gray-900 tracking-tight">
-                Recetas del <span className="text-primary-600">Perú</span>
+              <span
+                className={`text-2xl font-bold tracking-tight transition-colors ${
+                  isHomeTop ? 'text-white' : 'text-gray-900'
+                }`}
+              >
+                Recetas del{' '}
+                <span className={isHomeTop ? 'text-[#fde047]' : 'text-primary-600'}>
+                  Perú
+                </span>
               </span>
               <span className="text-2xl">🇵🇪</span>
             </Link>
           </div>
-          
-          <nav className="hidden md:flex space-x-8">
+
+          <nav className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-primary-600 ${
-                  pathname?.startsWith(link.href) ? 'text-primary-600' : 'text-gray-600'
+                className={`text-sm font-medium transition-colors ${
+                  isHomeTop
+                    ? 'text-white/85 hover:text-[#fde047]'
+                    : pathname?.startsWith(link.href)
+                    ? 'text-primary-600 font-semibold'
+                    : 'text-gray-600 hover:text-primary-600'
                 }`}
               >
                 {link.name}
               </Link>
             ))}
+            <button
+              type="button"
+              onClick={() => openChat()}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-extrabold transition shadow-sm cursor-pointer ${
+                isHomeTop
+                  ? 'bg-[#f59e0b] text-[#2d1200] hover:bg-[#fbbf24]'
+                  : 'bg-primary-600 text-white hover:bg-primary-700'
+              }`}
+            >
+              <span>👨‍🍳</span>
+              <span>Chef IA</span>
+            </button>
           </nav>
 
-          <div className="md:hidden flex items-center">
+          <div className="lg:hidden flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => openChat()}
+              className="inline-flex items-center gap-1 rounded-full bg-[#f59e0b] px-3 py-1.5 text-xs font-extrabold text-[#2d1200]"
+            >
+              <span>👨‍🍳</span>
+              <span>Chef IA</span>
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-primary-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
-              aria-expanded="false"
+              className={`inline-flex items-center justify-center p-2 rounded-md focus:outline-none ${
+                isHomeTop
+                  ? 'text-white hover:bg-white/10'
+                  : 'text-gray-600 hover:text-primary-600 hover:bg-gray-100'
+              }`}
+              aria-expanded={mobileMenuOpen}
             >
               <span className="sr-only">Abrir menú principal</span>
               {!mobileMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                <svg
+                  className="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="block h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               )}
             </button>
@@ -83,9 +147,9 @@ export default function Header() {
       </div>
 
       {/* Mobile menu */}
-      <div 
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+      <div
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         } bg-white border-b border-gray-200`}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">

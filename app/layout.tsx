@@ -4,6 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
+import RecetasChatWidget from "@/components/RecetasChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,9 +59,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://googleads.g.doubleclick.net" />
       </head>
       <body className="font-sans">
+        <SmoothScroll />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <RecetasChatWidget />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1070738569472471"
