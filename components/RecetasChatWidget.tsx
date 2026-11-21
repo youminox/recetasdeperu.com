@@ -359,16 +359,16 @@ export default function RecetasChatWidget() {
                 />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <h3 className="font-extrabold text-[15px] leading-tight truncate text-white">
-                    Chef IA · Recetas de Perú
+                    Chef IA · Recetas Perú
                   </h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[#fef3c7] text-[#78350f]">
+                  <span className="inline-flex items-center whitespace-nowrap shrink-0 leading-none text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-[#fef3c7] text-[#78350f]">
                     En línea
                   </span>
                 </div>
-                <p className="text-xs text-white/85 truncate">
-                  Orientación de recetas paso a paso (+3,970 platos)
+                <p className="text-xs text-white/85 truncate mt-0.5">
+                  Recetas paso a paso · +3,970 platos
                 </p>
               </div>
             </div>
