@@ -142,13 +142,18 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-        <p>
-          &copy; {currentYear} Recetas de Perú. Todos los derechos reservados.
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 text-sm text-gray-500">
+        <p className="text-xs text-gray-500 text-center md:text-left leading-relaxed">
+          En calidad de Afiliado de Amazon (IDs: <span className="text-gray-400">recetasdeperu-20</span> / <span className="text-gray-400">recetasdeperu-21</span>), Recetasdeperu.com obtiene ingresos por las compras adscritas que cumplen los requisitos aplicables sin costo adicional para el lector.
         </p>
-        <p className="flex items-center gap-1">
-          Hecho con <span className="text-red-500">❤️</span> en Perú
-        </p>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>
+            &copy; {currentYear} Recetas de Perú. Todos los derechos reservados.
+          </p>
+          <p className="flex items-center gap-1">
+            Hecho con <span className="text-red-500">❤️</span> en Perú
+          </p>
+        </div>
       </div>
     </footer>
   );

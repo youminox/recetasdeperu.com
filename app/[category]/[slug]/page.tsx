@@ -5,12 +5,28 @@ import { notFound } from 'next/navigation';
 import RecipeCard from '@/components/RecipeCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FuxionProductCard from '@/components/FuxionProductCard';
+import AmazonAffiliateBox from '@/components/AmazonAffiliateBox';
+import { getContextualAmazonProducts } from '@/lib/amazon';
 import {
   getPostBySlug,
   getRelatedPosts,
   getFuxionProduct,
   type Post,
 } from '@/lib/posts';
+
+function splitContentForInlineAffiliate(htmlContent: string): [string, string | null] {
+  const h2Matches = Array.from(htmlContent.matchAll(/<h2[^>]*>/gi));
+  const targetH2 = h2Matches.length >= 3 ? h2Matches[2] : h2Matches[1];
+  if (targetH2 && targetH2.index !== undefined && targetH2.index > 0) {
+    return [htmlContent.slice(0, targetH2.index), htmlContent.slice(targetH2.index)];
+  }
+  const pMatches = Array.from(htmlContent.matchAll(/<\/p>/gi));
+  if (pMatches.length >= 3 && pMatches[1].index !== undefined) {
+    const idx = pMatches[1].index + 4;
+    return [htmlContent.slice(0, idx), htmlContent.slice(idx)];
+  }
+  return [htmlContent, null];
+}
 
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'content', 'index.json');
@@ -916,6 +932,8 @@ export default async function RecipePage({
   const skeleton = post.domSkeleton || 'story-and-masterclass';
   const fuxionPrimary = getFuxionProduct(post.fuxion?.primaryProduct);
   const fuxionSecondary = getFuxionProduct(post.fuxion?.secondaryProduct);
+  const amazonContext = getContextualAmazonProducts(slug, category, post.title);
+  const [contentPart1, contentPart2] = splitContentForInlineAffiliate(post.content || '');
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
@@ -1038,9 +1056,23 @@ export default async function RecipePage({
       ) : (
         <>
           <div
-            className="recipe-content prose prose-lg max-w-none mb-12"
-            dangerouslySetInnerHTML={{ __html: post.content || '' }}
+            className="recipe-content prose prose-lg max-w-none mb-6"
+            dangerouslySetInnerHTML={{ __html: contentPart1 }}
           />
+          {contentPart2 && (
+            <>
+              <AmazonAffiliateBox
+                variant="inline"
+                sectionTitle={amazonContext.sectionTitle}
+                sectionSubtitle={amazonContext.sectionSubtitle}
+                products={amazonContext.products}
+              />
+              <div
+                className="recipe-content prose prose-lg max-w-none mb-12"
+                dangerouslySetInnerHTML={{ __html: contentPart2 }}
+              />
+            </>
+          )}
           {fuxionPrimary && (
             <FuxionProductCard
               product={fuxionPrimary}
@@ -1058,6 +1090,14 @@ export default async function RecipePage({
           variant="secondary"
         />
       )}
+
+      {/* Vitrina Amazon Affiliate de 3 productos contextuales */}
+      <AmazonAffiliateBox
+        variant="showcase"
+        sectionTitle={amazonContext.sectionTitle}
+        sectionSubtitle={amazonContext.sectionSubtitle}
+        products={amazonContext.products}
+      />
 
       {(skeleton === 'local-directory-guide' ||
         skeleton === 'encyclopedic-glossary') && (

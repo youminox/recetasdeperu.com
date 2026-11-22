@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import RecipeCard from '@/components/RecipeCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FuxionHub from '@/components/FuxionHub';
+import AmazonAffiliateBox from '@/components/AmazonAffiliateBox';
+import { getContextualAmazonProducts } from '@/lib/amazon';
 
 export async function generateStaticParams() {
   const filePath = path.join(process.cwd(), 'content', 'categories.json');
@@ -85,6 +87,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     return <FuxionHub posts={categoryPosts} />;
   }
 
+  const amazonContext = getContextualAmazonProducts(category, category, catData.name);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Breadcrumbs with Schema.org */}
@@ -101,6 +105,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           {catData.count} recetas auténticas peruanas de {catData.name.toLowerCase()}
         </p>
       </div>
+
+      {/* Vitrina Amazon Affiliate de 3 productos contextuales para la categoría */}
+      <AmazonAffiliateBox
+        variant="showcase"
+        sectionTitle={amazonContext.sectionTitle}
+        sectionSubtitle={amazonContext.sectionSubtitle}
+        products={amazonContext.products}
+      />
       
       {categoryPosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

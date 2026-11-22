@@ -12,6 +12,8 @@ import NutritionCounters, { type NutriItem } from "@/components/home/NutritionCo
 import DayNightSlider from "@/components/home/DayNightSlider";
 import MomentsCarousel, { type Moment } from "@/components/home/MomentsCarousel";
 import BudgetBlock, { type BudgetOption } from "@/components/home/BudgetBlock";
+import AmazonAffiliateBox from "@/components/AmazonAffiliateBox";
+import { getContextualAmazonProducts } from "@/lib/amazon";
 import { getAllPosts, getCategories } from "@/lib/posts";
 
 const CLAIMS = [
@@ -1025,6 +1027,25 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Vitrina Oficial Amazon Affiliate en la Portada */}
+      <section className="wrap pb-16">
+        {(() => {
+          const homeAmazon = getContextualAmazonProducts(
+            "home",
+            "platos",
+            "Recetas de Perú Cocina Peruana"
+          );
+          return (
+            <AmazonAffiliateBox
+              variant="showcase"
+              sectionTitle={homeAmazon.sectionTitle}
+              sectionSubtitle={homeAmazon.sectionSubtitle}
+              products={homeAmazon.products}
+            />
+          );
+        })()}
       </section>
 
       {/* 14. Preguntas Frecuentes (FAQ) */}

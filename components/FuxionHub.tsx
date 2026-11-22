@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FuxionProductCard from '@/components/FuxionProductCard';
+import AmazonAffiliateBox from '@/components/AmazonAffiliateBox';
+import { getContextualAmazonProducts } from '@/lib/amazon';
 import { getFuxionProduct, getFuxionProducts, type Post } from '@/lib/posts';
 
 const FORMAT_LABEL: Record<string, string> = {
@@ -193,6 +195,18 @@ export default function FuxionHub({ posts }: { posts: HubPost[] }) {
           prod ? <FuxionProductCard key={prod.slug} product={prod} variant="secondary" label="Producto del recetario" /> : null
         )}
       </section>
+
+      {(() => {
+        const amazonContext = getContextualAmazonProducts('fuxion', 'fuxion', 'Recetas con FuXion');
+        return (
+          <AmazonAffiliateBox
+            variant="showcase"
+            sectionTitle={amazonContext.sectionTitle}
+            sectionSubtitle={amazonContext.sectionSubtitle}
+            products={amazonContext.products}
+          />
+        );
+      })()}
 
       <section className="rounded-2xl border border-gray-200 bg-stone-50 p-6 md:p-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-5">Preguntas frecuentes</h2>
